@@ -1,19 +1,38 @@
 const User = require("./../models/user.model");
+const bcrypt = require("bcryptjs");
 exports.login = (req, res)=>{
     res.render("login");
 }
 exports.register = (req, res)=>{
     res.render("register");
 }
-exports.postLogin = (req, res)=>{
-    res.send("done");
-}
-exports.postRegister = (req, res)=>{
-    const data = req.body;
-    const u = new User(data);
-    u.save().then(()=>{
-        res.send("Done");
-    }).catch(err=>{
+exports.postLogin = async (req, res)=>{
+    try{
+        const  {email, password } = req.body;
+        const user = await User.findOne({ email })
+        if (!user) {
+            return res.send("Email or Password is not correct");
+        }
+        const match = await bcrypt.compare(password, user.password);
+        if (!match) {
+            return res.send("Email or Password is not correct");
+        }
+        res.redirect("/auth/addproduct");
+    }catch(err){
         res.send(err);
-    })
+    };
+
+}
+exports.postRegister = async (req, res)=>{
+    try{
+        const data = req.body;
+        const salt = await bcrypt.genSalt(10);
+        const hashed = await bcrypt.hash(data.password, salt);
+        data.password = hashed;
+        const u = new User(data);
+        await u.save();
+        res.send("DONE");
+    }catch(err){
+        res.send(err);
+    };
 }
