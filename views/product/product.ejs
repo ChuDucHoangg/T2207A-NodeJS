@@ -19,18 +19,22 @@
                     <th scope="col">Price</th>
                     <th scope="col">Description</th>
                     <th scope="col">Image</th>
+                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                    <% for (const product of products) { %>
-                        <tr>
-                            <!-- <th scope="row"><%= product._id %></th> -->
-                            <td><%= product.name %></td>
-                            <td><%= product.price %></td>
-                            <td><%= product.description %></td>
-                            <td><img src="product.image"></td>
-                        </tr>
-                    <% } %>
+                  <% products.forEach(e=>{  %>
+                    <tr>
+                        <td><%= e.name %></td>
+                        <td><%= e.price %></td>
+                        <td><%= e.description %></td>
+                        <td><img src="data:<%= e.image.contentType %>;base64,<%= e.image.data %>" width="100px"/></td>
+                        <td>
+                          <a href="/auth/editproduct/<%= e._id %>" class="btn btn-primary">Edit</a>
+                          <a onclick="return confirm('Xác nhận xoá sản phẩm <%= e.name %>')" href="/auth/deleteproduct/<%= e._id %>"  class="btn btn-warning">Delete</a>
+                        </td>
+                    </tr>        
+                <% }) %>
                 </tbody>
               </table>
               <div class="button">

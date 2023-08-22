@@ -16,5 +16,5 @@ const webrouter = require("./src/routes/web");
 app.use("/", webrouter);
 const userrouter = require("./src/routes/user");
 app.use("/auth",userrouter);
-const productrouter = require("./src/routes/product");
+const productrouter = require("./src/routes/product.router");
 app.use("/auth",productrouter);

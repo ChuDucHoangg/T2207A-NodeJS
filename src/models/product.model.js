@@ -3,19 +3,24 @@ const product_schema = new mongoose.Schema({
     name: {
         type: String,
         required:[true,'Truong nay bat buoc phai nhap'],
-        unique:true,
+        minLength: 1,
+        maxLength: 255
     },
     // category:{
     //     type: ObjectID,
     // },
     price: {
-        type:String,
+        type:Number,
+        min:0,
         required:[true,'Truong nay bat buoc phai nhap'],
     }, 
     description: {
         type:String,
-        required:[true,'Truong nay bat buoc phai nhap'],
+        required: true
     },
-    image: String
+    image: {
+        data: String,
+        contentType:String
+    }
 });
 module.exports = mongoose.model("Product", product_schema);
