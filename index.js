@@ -16,5 +16,12 @@ const webrouter = require("./src/routes/web");
 app.use("/", webrouter);
 const userrouter = require("./src/routes/user");
 app.use("/auth",userrouter);
+
 const productrouter = require("./src/routes/product.router");
 app.use("/auth",productrouter);
+
+const categoryrouter = require("./src/routes/category.router");
+app.use("/auth",categoryrouter);
+
+const brandrouter = require("./src/routes/brand.router");
+app.use("/auth",brandrouter);

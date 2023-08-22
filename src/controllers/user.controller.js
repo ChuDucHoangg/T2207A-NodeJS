@@ -17,7 +17,7 @@ exports.postLogin = async (req, res)=>{
         if (!match) {
             return res.send("Email or Password is not correct");
         }
-        res.redirect("/auth/addproduct");
+        res.redirect("/");
     }catch(err){
         res.send(err);
     };
@@ -31,7 +31,7 @@ exports.postRegister = async (req, res)=>{
         data.password = hashed;
         const u = new User(data);
         await u.save();
-        res.send("DONE");
+        res.redirect("/auth/login");
     }catch(err){
         res.send(err);
     };
