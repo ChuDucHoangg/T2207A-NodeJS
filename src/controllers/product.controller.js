@@ -1,43 +1,54 @@
 const Product = require("./../models/product.model");
+const Category = require("./../models/category.model");
+const Brand = require("./../models/brand.model");
 const fs = require("fs");
 exports.product = async (req, res)=>{
     try{
-        const products = await Product.find();
-
-        res.render("product/product", { products }); 
+        const products = await Product.find().populate("category").populate("brand").exec();
+        res.render("product/product", { products:products }); 
     }catch{
         res.send(err);
     }
 }
-exports.addproduct = (req, res)=>{
-    const data = req.body;
-    data.url = req._parsedOriginalUrl.path;
-    res.render("product/addproduct",{product:data});
-}
-exports.postAddProduct = (req, res)=>{
-    const data = req.body;
-    const file = req.file
-    if(file) {
-        const img = fs.readFileSync(file.path);
-        data.image = {
-            contentType: file.mimetype,
-            data:img.toString("base64")
-        }
+exports.addproduct = async (req, res)=>{
+    try{
+        const categories = await Category.find();
+        const brands = await Brand.find();
+        const data = req.body;
+        data.url = req._parsedOriginalUrl.path;
+        res.render("product/addproduct",{ product: data, categories: categories, brands: brands });
+    }catch (error) {
+        res.send(error);
     }
-    const p = new Product(data);
-    p.save().then(()=>{
+    
+}
+exports.postAddProduct = async (req, res)=>{
+    try {
+        const data = req.body;
+        const file = req.file;
+        if (file) {
+            const img = fs.readFileSync(file.path);
+            data.image = {
+                contentType: file.mimetype,
+                data: img.toString("base64")
+            }
+        }
+        const p = new Product(data);
+        await p.save();
         res.redirect("/auth/product");
-    }).catch(err=>{
-        res.send(err);
-    })
+    } catch (error) {
+        res.send(error);
+    }
 }
 
 exports.formEdit = async (req,res) =>{
     const _id = req.params.id;
+    const categories = await Category.find();
+    const brands = await Brand.find();
     try{
-        const product = await Product.findById(_id);
+        const product = await Product.findById(_id).populate("category").populate("brand").exec();
         product.url = req._parsedOriginalUrl.path;
-        res.render("product/addproduct",{product:product});
+        res.render("product/addproduct",{product:product , categories: categories, brands: brands});
     }catch (error) {
         res.redirect("/auth/product")
     }
@@ -60,7 +71,7 @@ exports.update = async (req, res) =>{
         await Product.findByIdAndUpdate(_id,data);
         res.redirect("/auth/product");
     }catch (error) {
-        res.render("product/addproduct",{product:product});
+        res.render("product/addproduct",{product:product , categories: categories, brands: brands});
     }
 }
 

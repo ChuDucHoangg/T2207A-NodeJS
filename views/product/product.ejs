@@ -10,7 +10,7 @@
 <body>
     <section>
         <div class="container">
-            <h1 class="form-inner__heading pt-2 pb-2">List Products</h1>
+            <h1 class="form-inner__heading pt-2 pb-2">List Products | <a href="/"> Home</a></h1>
             <table class="table">
                 <thead>
                   <tr>
@@ -18,6 +18,8 @@
                     <th scope="col">Name</th>
                     <th scope="col">Price</th>
                     <th scope="col">Description</th>
+                    <th scope="col">Category</th>
+                    <th scope="col">Brand</th>
                     <th scope="col">Image</th>
                     <th scope="col">Action</th>
                   </tr>
@@ -28,6 +30,8 @@
                         <td><%= e.name %></td>
                         <td><%= e.price %></td>
                         <td><%= e.description %></td>
+                        <td><%= e.category.name %></td>
+                        <td><%= e.brand.name %></td>
                         <td><img src="data:<%= e.image.contentType %>;base64,<%= e.image.data %>" width="100px"/></td>
                         <td>
                           <a href="/auth/editproduct/<%= e._id %>" class="btn btn-primary">Edit</a>

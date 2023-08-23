@@ -6,9 +6,14 @@ const product_schema = new mongoose.Schema({
         minLength: 1,
         maxLength: 255
     },
-    // category:{
-    //     type: ObjectID,
-    // },
+    category:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+    },
+    brand:{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Brand',
+    },
     price: {
         type:Number,
         min:0,

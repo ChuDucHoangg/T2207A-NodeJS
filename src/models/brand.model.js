@@ -4,6 +4,10 @@ const brand_schema = new mongoose.Schema({
         type: String,
         required:[true,'Truong nay bat buoc phai nhap'],
     },
+    products: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product'
+    }],
     image: {
         data: String,
         contentType:String
