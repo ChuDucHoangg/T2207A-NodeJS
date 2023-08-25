@@ -1,5 +1,6 @@
 const User = require("./../models/user.model");
 const bcrypt = require("bcryptjs");
+const gmail = require("./../mails/gmail");
 exports.login = (req, res)=>{
     res.render("login");
 }
@@ -17,6 +18,11 @@ exports.postLogin = async (req, res)=>{
         if (!match) {
             return res.send("Email or Password is not correct");
         }
+        req.session.auth = {
+            fullname: user.fullname,
+            email: user.email,
+            role: user.role
+        }
         res.redirect("/");
     }catch(err){
         res.send(err);
@@ -31,6 +37,17 @@ exports.postRegister = async (req, res)=>{
         data.password = hashed;
         const u = new User(data);
         await u.save();
+
+        //send email
+        gmail.sendMail({
+            from: "Admin NodeJS",
+            to: u.email, //u.email
+            cc: "",  //gui kem 
+            bcc: "",
+            subject: "Welcome to",
+            html: "<h1>Chuc mung ban da dang ky thanh cong tai khoan NodeJS</h1>"  
+
+        });
         res.redirect("/auth/login");
     }catch(err){
         res.send(err);

@@ -2,6 +2,11 @@ const express = require("express");
 const router = express.Router();
 const controller =  require("../controllers/product.controller");
 
+const middleware = require("./../middlewares/role.middleware");
+router.use("/addproduct", middleware.role_admin);
+router.use("/editproduct/:id", middleware.role_admin);
+router.use("/deleteproduct/:id", middleware.role_admin);
+
 //upload file
 const multer = require("multer");
 const storage = multer.diskStorage({

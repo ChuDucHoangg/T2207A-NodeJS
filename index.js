@@ -6,6 +6,20 @@ app.listen(port,function(){
     console.log("Chay code node js...");
 })
 
+//config session
+const session = require("express-session");
+app.use(
+    session({
+        resave: true,
+        saveUninitialized: true,
+        secret: "abcdefghijklmnopqrstuvwxyz",
+        cookie: {
+            maxAge: 3600000, //miliseconds
+            secure: false, 
+        }
+    })
+);
+
 require("./src/db/database");
 app.set("view engine", "ejs");
 app.use(express.static("public"));

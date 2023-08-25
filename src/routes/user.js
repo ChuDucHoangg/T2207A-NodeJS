@@ -1,6 +1,20 @@
 const express = require("express");
 const router = express.Router();
 const controller =  require("./../controllers/user.controller");
+// ===== Middleware ===== //
+// All routes
+router.use("/login", (req, res, next) => {
+    const auth = req.session.auth;
+    if(auth){
+        return res.redirect("/");
+    }
+    next();
+});
+// Only register 
+router.use("/register", (req, res, next) => {
+    // res.send("Time " + Date.now());
+    next();
+});
 router.get("/login",controller.login);
 router.post("/login",controller.postLogin);
 router.get("/register",controller.register);
